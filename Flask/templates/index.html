@@ -1,1 +1,199 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>Salary Prediction ML</title>
+  <style>
+        body
+        {
+            background-image:url( "{{ url_for('static', filename = 'image/img.png') }}" )
+        }
 
+    </style>
+<link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+		<header>
+			<div class="first_container">
+		   	 <nav class="first_nav">
+						<ul>
+
+						<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+							<li><strong><a href="/dashboard">HR Salary Dashboard</a></strong></li>
+							<li id="new_prediction"><a href="/">New Prediction</a></li>
+						</ul>
+				</nav>
+			</div>
+		</header>
+
+		<section class ="first_sec">
+            <div class="intro">
+                <h1>Salary Prediction</h1>
+                <br>
+                <p> Salary Prediction is an important for process for any organization. Here we try to analyze a dataset and train a machine learning model to predict salary of a new employee(whether it is <=50k or > 50k).</p>
+                <p>Salary depends on many factors such as age, educational qualifications, occupation, work hours, years of experience etc.</p><a href="/dashboard">View Dashboard</a>
+            </div>
+
+            <br>
+                <div class="con">
+				 <div class="form">
+     	 				<!-- Main Input For Receiving Query to our ML -->
+
+    					<form action="{{ url_for('predict')}}"method="post">
+                    
+                            
+                            <span>
+                                <div class="nameField">
+      					            <label for="Age">Age</label>
+                                </div>
+                                <div class="inputField">
+      					            <input type="number" step="any" id = "Age" name="Age" placeholder="Enter Age"  required="required" />
+                                </div>
+                            </span>
+                            
+                            <span>
+                                <div class="nameField">
+                                    <label for="workclass">Work Class</label>
+                                </div>
+                                <div class="inputField">
+
+                                    <select id="workclass" name="workclass" placeholder='Choose workclass' required="required">
+                                        <option value="" disabled selected hidden>--Select--</option>
+                                        <option value="0">Without-pay</option>
+                                        <option value="1">Private</option>
+                                        <option value="2">State-gov</option>
+                                        <option value="3">Self-emp-not-inc</option>
+                                        <option value="4">Local-gov</option>
+                                        <option value="5">Federal-gov</option>
+                                        <option value="6">Self-emp-inc</option>
+                                    </select>
+                                </div>
+                            </span>
+
+                            <span>
+                                <div class="nameField">
+                                    <label for="education">Education</label>
+                                </div>
+                                <div class="inputField">
+                                
+                                    <select id="education" name="education" placeholder='Choose education' required="required">
+                                        <option value="" disabled selected hidden>--Select--</option>
+                                        <option value="0">Preschool</option>
+                                        <option value="1">1st-4th</option>
+                                        <option value="2">5th-6th</option>
+                                        <option value="3">9th</option>
+                                        <option value="4">11th</option>
+                                        <option value="5">7th-8th</option>
+                                        <option value="6">10th</option>
+                                        <option value="7">12th</option>
+                                        <option value="8">HS-grad</option>
+                                        <option value="9">Some-college</option>
+                                        <option value="10">Assoc-acdm</option>
+                                        <option value="11">Assoc-voc</option>
+                                        <option value="12">Bachelors</option>
+                                        <option value="13">Masters</option>
+                                        <option value="14">Doctorate</option>
+                                        <option value="15">Prof-school</option>
+                                        
+                                    </select>
+                                </div>
+                            </span>
+
+                            <span>
+                                <div class="nameField">
+                                    <label for="marital-status">Marital Status</label>
+                                </div>
+                                <div class="inputField">
+                                    <select id="marital-status" name="marital-status" required="required">
+                                        <option value="" disabled selected hidden>--Select--</option>
+                                        <option value="0">Never-married</option>
+                                        <option value="1">Separated</option>
+                                        <option value="2">Married-spouse-absent</option>
+                                        <option value="3">Widowed</option>
+                                        <option value="4">Divorced</option>
+                                        <option value="5">Married-civ-spouse</option>
+                                        <option value="6">Married-AF-spouse</option>
+                                    </select>
+                                </div>
+                            </span>
+                                 
+                            <span>
+                                <div class="nameField">
+                                     <label for="occupation">Occupation</label>
+                                </div>
+                                <div class="inputField">
+                                    <select id="occupation" name="occupation" required="required">
+                                        <option value="" disabled selected hidden>--Select--</option>
+                                        <option value="0">Priv-house-serv</option>
+                                        <option value="1">Other-service</option>
+                                        <option value="2">Handlers-cleaners</option>
+                                        <option value="3">Armed-Forces</option>
+                                        <option value="4">Farming-fishing</option>
+                                        <option value="5">Machine-op-inspct</option>
+                                        <option value="6">Adm-clerical</option>
+                                        <option value="7">Transport-moving</option>
+                                        <option value="8">Craft-repair</option>
+                                        <option value="9">Sales</option>
+                                        <option value="10">Tech-support</option>
+                                        <option value="11">Protective-serv</option>
+                                        <option value="12">Prof-specialty</option>
+                                        <option value="13">Exec-managerial</option>
+                                        
+                                    </select>
+                                </div>
+                            </span>
+                            <span>
+                                <div class="nameField">
+                                <label for="sex">Sex</label>
+                                </div>
+                                <div class="inputField">
+                                    <select id="sex" name="sex" required="required">
+                                        <option value="" disabled selected hidden>--Select--</option>
+                                        <option value="0">Female</option>
+                                        <option value="1">Male</option>
+                                    </select>
+                                </div>
+                            </span>
+                        
+                            <span>
+                                <div class="nameField">
+                                <label for="hours-per-week">Hours per week</label>
+                                </div>
+                                <div class="inputField">
+                                    <select id="hours-per-week" name="hours-per-week" required="required">
+                                        <option value="" disabled selected hidden>--Select--</option>
+                                        <option value="0">Less than or equal to 35</option>
+                                        <option value="1">More than 35 and Less than or equal to 40</option>
+                                        <option value="0">More than 40</option>
+                                    </select>
+                                </div>
+                            </span>
+                        <span>
+                          <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+                        </span>
+                    
+                     </form> 
+                     
+                 </div>
+                </div>
+                <div class="output">
+                    <br>
+                    <br>
+                    <br>
+                    <h1 background-color: 'white'>
+                        {{ prediction_text }}
+                    </h1>
+                </div>
+                
+		</section>
+       
+	</body>
+</html>
